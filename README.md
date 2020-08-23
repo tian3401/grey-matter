@@ -1,4 +1,4 @@
-# grey-matter
+# grey-matter 🧠
 Grey-matter is a simple command line Deno app that helps with mental math.
 
 Currently it only supports multiplication of randomly generated numbers. The range of numbers is [1,999].
