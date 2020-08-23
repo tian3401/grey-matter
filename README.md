@@ -50,3 +50,7 @@ In order to record your progress you must create a log.txt file.
 In your CLI type the following: 
 
 ```deno run --allow-read --allow-write main.ts```
+
+## Controls 
+
+type ```quit``` at any time to exit the program.
