@@ -7,21 +7,21 @@ async function logResults(stats: Stats) {
   const decoder = new TextDecoder();
 
   const today = getDate(); 
-  const result = `${today}: correct: ${correct} incorrect: ${incorrect} accuracy: ${accuracy.toFixed()}%`;
+  const result = `${today}: correct: ${correct} incorrect: ${incorrect} accuracy: ${accuracy.toFixed()}%,`;
   
-
-  console.log(`\nHere are your results for today:\n${result}\n`)
+  console.log(`\n🐙 Here are your results for today:\n\n🐙 ${result}\n`)
 
   //read the log first 
   const content = await Deno.readFile('log.txt')
   const history = decoder.decode(content);
   //combine and rewrite the log
-  const combinedResult = history.concat(`\n${result}`);
+  const combinedResult = history == '' ? result : history.concat(`\n${result}`);
   const encodedResult = encoder.encode(combinedResult);
 
-  console.log('\nWriting your results to the log...\n');
+  console.log('\n🐙 Writing your results to the log...\n');
   await Deno.writeFile("log.txt", encodedResult);
-  console.log('\nDone!\n')
-}
+
+  console.log('\n🐙 Done!\n')
+};
 
 export default logResults;
