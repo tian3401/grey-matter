@@ -1,5 +1,5 @@
 import getDate from "./get-date.ts"
-import {Stats} from "../constants/stats.ts"
+import {Stats} from "../constants/interfaces.ts"
 
 async function logResults(stats: Stats) {
   const { correct, incorrect, accuracy} = stats;

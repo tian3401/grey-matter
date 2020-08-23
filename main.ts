@@ -1,4 +1,4 @@
-import {Stats} from "./constants/stats.ts"
+import {Stats} from "./constants/interfaces.ts"
 import logResults from "./deno-modules/log-results.ts"
 import prompt from "./deno-modules/prompt.ts"
 import EmojiLibrary from "./deno-modules/EmojiLibrary.ts"
