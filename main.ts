@@ -1,12 +1,17 @@
 import {Stats} from "./constants/stats.ts"
 import logResults from "./deno-modules/log-results.ts"
 import prompt from "./deno-modules/prompt.ts"
+import EmojiLibrary from "./deno-modules/EmojiLibrary.ts"
 
 async function main(): Promise<void> {
   let repeat: boolean = true; 
   let countCorrect = 0, countIncorrect = 0; 
   
   console.log('\nWelcome to Grey Matter 🧠\n')
+
+  const positiveEmojiLibrary = new EmojiLibrary(['(>‿◠)✌','٩(˘◡˘)۶','(͠≖ ͜ʖ͠≖)👌','ᕙ(`▿´)ᕗ']);
+
+  const negativeEmojiLibrary = new EmojiLibrary(['( ˘︹˘ )','( ◡́.◡̀)(^◡^ )','( ͡❛ 👅 ͡❛)','(⊙.⊙(◉̃_᷅◉)⊙.⊙)']);
 
   while(repeat) {
     let power = Math.ceil(Math.random()*3);
@@ -16,6 +21,10 @@ async function main(): Promise<void> {
 
     const question = `${num1} * ${num2} ?  `;
 
+    let positiveEmoji = positiveEmojiLibrary.fetchFromEmojiLibrary();
+
+    let negativeEmoji = negativeEmojiLibrary.fetchFromEmojiLibrary();
+
     let input = await prompt(question);
 
     if(input.toLowerCase() == 'quit') {
@@ -24,10 +33,10 @@ async function main(): Promise<void> {
   
     if(input == String(answer)) {
       countCorrect++; 
-      console.log(`\nCorrect ᕙ(\`▿´)ᕗ!\n${answer}\n`)
+      console.log(`\nCorrect ${positiveEmoji}!\n${answer}\n`)
     } else {
       countIncorrect++;
-      console.log(`\nIncorrect (⊙.⊙(◉̃_᷅◉)⊙.⊙)\nanswer: ${answer}\n`)
+      console.log(`\nIncorrect ${negativeEmoji}\nanswer: ${answer}\n`)
     }
   }
   let accuracy = countCorrect + countIncorrect !== 0 ? ((countCorrect/(countCorrect + countIncorrect))*100) : 0; 
