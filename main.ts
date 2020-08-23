@@ -1,4 +1,6 @@
 import {Stats} from "./constants/stats.ts"
+import logResults from "./deno-modules/log-results.ts"
+import prompt from "./deno-modules/prompt.ts"
 
 async function main(): Promise<void> {
   let repeat: boolean = true; 
@@ -32,42 +34,5 @@ async function main(): Promise<void> {
   let stats: Stats = {correct: countCorrect, incorrect: countIncorrect, accuracy: accuracy};
   logResults(stats);
 };
-
-async function prompt(message: string = "") {
-  const buffer = new Uint8Array(1024);
-  await Deno.stdout.write(new TextEncoder().encode(message));
-  const number = <number>await Deno.stdin.read(buffer); 
-  return new TextDecoder().decode(buffer.subarray(0, number)).trim();
-};
-
-function getDate() {
-  const today = new Date();
-  const date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDay();
-  return date; 
-}
-
-
-async function logResults(stats: Stats) {
-  const { correct, incorrect, accuracy} = stats;
-  const encoder = new TextEncoder(); 
-  const decoder = new TextDecoder();
-
-  const today = getDate(); 
-  const result = `${today}: correct: ${correct} incorrect: ${incorrect} accuracy: ${accuracy.toFixed()}%`;
-  
-
-  console.log(`\nHere are your results for today:\n${result}\n`)
-
-  //read the log first 
-  const content = await Deno.readFile('log.txt')
-  const history = decoder.decode(content);
-  //combine and rewrite the log
-  const combinedResult = history.concat(`\n${result}`);
-  const encodedResult = encoder.encode(combinedResult);
-
-  console.log('\nWriting your results to the log...\n');
-  await Deno.writeFile("log.txt", encodedResult);
-  console.log('\nDone!\n')
-}
 
 main(); 
