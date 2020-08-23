@@ -33,7 +33,7 @@ async function main(): Promise<void> {
   
     if(input == String(answer)) {
       countCorrect++; 
-      console.log(`\nCorrect ${positiveEmoji}!\n${answer}\n`)
+      console.log(`\nCorrect!!! ${positiveEmoji}\n${answer}\n`)
     } else {
       countIncorrect++;
       console.log(`\nIncorrect ${negativeEmoji}\nanswer: ${answer}\n`)
