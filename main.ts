@@ -2,6 +2,7 @@ import {Stats} from "./constants/interfaces.ts"
 import logResults from "./deno-modules/log-results.ts"
 import prompt from "./deno-modules/prompt.ts"
 import EmojiLibrary from "./deno-modules/EmojiLibrary.ts"
+import ProblemGenerator from "./deno-modules/problem-generator.ts"
 
 async function main(): Promise<void> {
   let repeat: boolean = true; 
