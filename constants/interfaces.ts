@@ -5,5 +5,6 @@ interface Stats {
 };
 
 export {
-  Stats,
+  Stats
 };
+
