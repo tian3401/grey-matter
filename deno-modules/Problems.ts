@@ -1,6 +1,7 @@
 import prompt from "../deno-modules/prompt.ts"
 import ProblemGenerator from "./ProblemGenerator.ts";
 import EmojiLibrary from "./EmojiLibrary.ts";
+import {Select} from 'https://deno.land/x/cliffy/prompt/mod.ts';
 
 class MentalMath extends ProblemGenerator {
   repeat: boolean;
@@ -10,13 +11,21 @@ class MentalMath extends ProblemGenerator {
   }
 
   async generateProblem() {
+      const digitSettings = await Select.prompt({
+          message: 'Please select your digit settings',
+          options: [
+            {name: '2 by 2 digit problems', value: '[2,2]'},
+            {name: '2 by 3 digit problems', value: '[2,3]'},
+            {name: '3 by 3 digit problems', value: '[3,3]'}
+          ]
+        })
 
     while(this.repeat) {
-      let power = Math.ceil(Math.random()*3);
-      let num1 = Math.ceil(Math.random()*10**power);
-      let num2: number = Math.ceil(Math.random()*10**power);
-      const question =`👉 ${num1} * ${num2} ? `;
-      const answer: number = num1 * num2; 
+      let numbers = this.setDigits(digitSettings);
+      const question =`👉 ${numbers?.num1} * ${numbers?.num2} ? `;
+      const num1 = numbers?.num1;
+      const num2 = numbers?.num2;
+      const answer   = Number(num1) * Number(num2);
       
       let positiveEmoji = this.positiveEmoji.fetchFromEmojiLibrary();
       let negativeEmoji = this.negativeEmoji.fetchFromEmojiLibrary();
@@ -34,6 +43,33 @@ class MentalMath extends ProblemGenerator {
         this.incorrect++;
         console.log(`\nIncorrect ${negativeEmoji}\nanswer: ${answer}\n`)
       }
+    }
+  }
+
+  private getRandomInt(minimum: number, maximum: number) {
+    let min = Math.ceil(minimum),
+        max = Math.floor(maximum);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  private setDigits(selector: string) {
+
+    switch(selector) {
+      case '[2,2]': {
+        let num1 = this.getRandomInt(10,99),
+            num2 = this.getRandomInt(10,99);
+        return {'num1': num1, 'num2': num2};
+      }
+      case '[2,3]':  {
+        let num1 = this.getRandomInt(10,999),
+            num2 = this.getRandomInt(10,99);
+        return {'num1': num1, 'num2': num2};
+      }
+      case '[3,3]': {
+        let num1 = this.getRandomInt(100,999),
+            num2 = this.getRandomInt(100,999);
+        return {'num1': num1, 'num2': num2};
+      }  
     }
   }
 }
@@ -54,7 +90,6 @@ class KoreanVocabulary extends ProblemGenerator {
     })
     while(this.repeat) {
       const randomNum = Math.floor(Math.random()*wordList.length);
-      console.log(randomNum)
       const randomWord = wordList[randomNum];
       const question = `👉 ${randomWord} ? `;
       const answer = this.vocabMap.get(randomWord);
