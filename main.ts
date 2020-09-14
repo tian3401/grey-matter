@@ -1,3 +1,4 @@
+import {Select} from 'https://deno.land/x/cliffy/prompt/mod.ts';
 import {Stats} from "./constants/interfaces.ts";
 import logResults from "./deno-modules/log-results.ts";
 import EmojiLibrary from "./deno-modules/EmojiLibrary.ts";
@@ -10,20 +11,50 @@ async function main(): Promise<void> {
   console.log('\nWelcome to Grey Matter 🧠\n')
   console.log('Let\'s get your brain roll\'n! 🐙\n');
 
-  const mentalMathProblems = new MentalMath('mental-math','math',positiveEmojiLibrary,negativeEmojiLibrary);
+  const selector = await Select.prompt( {
+    message: `What do you want to learn?`,
+    options: [
+      {name: 'Mental Math', value: 'Mental Math package is loading...'},
+      {name: 'Korean', value: 'Korean package is loading...'}
+    ]
+  });
 
-  const wordMap = new Map([['것','thing,object'],['하다', 'to do']]); 
-  const koreanProblems = new KoreanVocabulary('matty\'s korean','language',positiveEmojiLibrary,negativeEmojiLibrary,wordMap);
+  let countCorrect,
+      countIncorrect; 
 
-  // await mentalMathProblems.generateProblem(); 
-  await koreanProblems.generateProblem();
+  switch(selector) {
+    case 'Mental Math package is loading...':
+      const mentalMathProblems = new MentalMath('mental-math','math',positiveEmojiLibrary,negativeEmojiLibrary);
+      await mentalMathProblems.generateProblem(); 
 
-  const countCorrect = mentalMathProblems.correct;
-  const countIncorrect = mentalMathProblems.incorrect; 
+      countCorrect = mentalMathProblems.correct;
+      countIncorrect = mentalMathProblems.incorrect;
 
-  let accuracy = countCorrect + countIncorrect !== 0 ? ((countCorrect/(countCorrect + countIncorrect))*100) : 0; 
-  let stats: Stats = {correct: countCorrect, incorrect: countIncorrect, accuracy: accuracy};
-  logResults(stats);
+      writeStat(countCorrect, countIncorrect);
+      break;
+
+    case 'Korean package is loading...':
+      const wordMap = new Map([['것','thing,object'],['하다', 'to do']]); 
+      const koreanProblems = new KoreanVocabulary('matty\'s korean','language',positiveEmojiLibrary,negativeEmojiLibrary,wordMap);
+      await koreanProblems.generateProblem();
+
+      countCorrect = koreanProblems.correct;
+      countIncorrect = koreanProblems.incorrect;
+
+      writeStat(countCorrect, countIncorrect);
+      break;
+
+    default: 
+      console.log('sorry I don\'t recognize that package');
+  } 
+
+  function writeStat(countCorrect: number, countIncorrect: number) {
+    let accuracy = countCorrect + countIncorrect !== 0 ? ((countCorrect/(countCorrect + countIncorrect))*100) : 0; 
+    let stats: Stats = {correct: countCorrect, incorrect: countIncorrect, accuracy: accuracy};
+    return logResults(stats);
+  }
+
+
 };
 
 main(); 
